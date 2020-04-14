@@ -1,6 +1,5 @@
 #Data berisi 197 siswa --> data relasi, ukuran matriks 199x197
 #cell(i,j) = 1 berarti siswa-i berteman dengan siswa-j
-install.packages("stargazer")
 library(igraph)
 setwd("D:\\Project\\hipotesis-data-graph\\example")
 
@@ -13,7 +12,9 @@ attrb = as.matrix(read.csv("attrb.csv",header=FALSE, sep=","))
 attr_smoke = attrb[,1] #kolom 1: utk smoking dan kolom 2: utk gender (1=boy, 2=girl)
 attr_smoke[attr_smoke %in% c(1,2,3)] <- 0 #... no need
 attr_smoke[attr_smoke %in% c(4,5,6)] <- 1
-
+print(length(attr_smoke))
+print(length(data_friends))
+break
 gfriends <- graph_from_adjacency_matrix(data_friends)
 gfriends.smoke <- attr_smoke
 

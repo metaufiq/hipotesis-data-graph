@@ -1,40 +1,44 @@
 #Data berisi 197 siswa --> data relasi, ukuran matriks 199x197
 #cell(i,j) = 1 berarti siswa-i berteman dengan siswa-j
-install.packages("igraph")
 library(igraph)
-# setwd("D:/kampus/2020/Genap_2019_AJS_rabu/contoh")
+setwd("D:\\Project\\hipotesis-data-graph")
 
-data_friends = as.matrix(read.csv("friendship.csv",header=FALSE, sep=","))
-attrb = as.matrix(read.csv("attrb.csv",header=FALSE, sep=","))
+relation = as.matrix(read.csv("relasi.csv",header=FALSE, sep=",",stringsAsFactors=FALSE))
+relation[grepl("0",relation)] <- 0
+relation[grepl("1",relation)] <- 1
+attrb = as.matrix(read.csv("atribut.csv",header=FALSE, sep=","))
 
 #data atribut: 1-6, jumlah baris dalam data atribut sama dengan data relasi
 #(1=never smoked, 2=only ever tried smoking once, 3=used to smoke but never smoke now, 
 # 4=<1 cigarette a week, 5=1-6 cigarettes a week, 6=>6 cigarettes a week)
-attr_smoke = attrb[,1] #kolom 1: utk smoking dan kolom 2: utk gender (1=boy, 2=girl)
-attr_smoke[attr_smoke %in% c(1,2,3)] <- 0 #... no need
-attr_smoke[attr_smoke %in% c(4,5,6)] <- 1
+attr_userId = attrb[,2] #kolom 1: utk smoking dan kolom 2: utk gender (1=boy, 2=girl)
+# print(attrb[,1])
+attr_userId[grepl("A3UCN2RGY7O6S1",attr_userId)] <- 1
+attr_userId[!attr_userId %in% c(1)] <- 0
 
-gfriends <- graph_from_adjacency_matrix(data_friends)
-gfriends.smoke <- attr_smoke
+gfoods <- graph_from_adjacency_matrix(relation)
+gfoods.userId <- attr_userId
 
 #Hypotheses about the effect popularity on adolescent’s smoking level
 #H1: Are popular students more or less likely to start smoking?
 #Noted that popularity status is showed by in-degree value of nodes (students).
 
 #plotting to check Linear relationship ... model assumptions for regression
-gfriends.indegree <- degree(gfriends, mode = "in")
-plot(gfriends.indegree, gfriends.smoke, main="Scatterplot smoke ~ indegree", 
+gfoods.indegree <- degree(gfoods)
+plot(gfoods.indegree, gfoods.userId, main="Scatterplot smoke ~ indegree", 
   	xlab="indegree", ylab="smoke (0/1)", pch=19)
+
 # hasilnya tdk terbukti karena tdk terlihat jelas kecenderungan jumlah teman dgn kebiasaan smoke
 
 # check berdasarkan clustering coefficient or transitivity
 # ... Transitivity in igraph measures the probability of a student for having friendship relation
-gfriends.clustcoeff <- transitivity(gfriends, type="local", isolates = "zero")
-plot(gfriends.clustcoeff, gfriends.smoke, main="Scatterplot smoke ~ clustcoeff", 
+gfoods.clustcoeff <- transitivity(gfoods, type="local", isolates = "zero")
+plot(gfoods.clustcoeff, gfoods.userId, main="Scatterplot smoke ~ clustcoeff", 
   	xlab="clustcoeff", ylab="smoke (0/1)", pch=19)
+break
 # siswa dgn probability berteman (clustcoeff) rendah cenderung tdk merokok
 
-data_cek <- as.data.frame(cbind(gfriends.smoke, gfriends.indegree, gfriends.clustcoeff, attrb[,2]))
+data_cek <- as.data.frame(cbind(gfoods.userId, gfoods.indegree, gfoods.clustcoeff, attrb[,2]))
 colnames(data_cek) <- c('smoke', 'indegree', 'clustcoeff', 'gender')
 
 set.seed(100)
