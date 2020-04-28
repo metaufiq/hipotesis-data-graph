@@ -12,9 +12,8 @@ attrb = as.matrix(read.csv("attrb.csv",header=FALSE, sep=","))
 attr_smoke = attrb[,1] #kolom 1: utk smoking dan kolom 2: utk gender (1=boy, 2=girl)
 attr_smoke[attr_smoke %in% c(1,2,3)] <- 0 #... no need
 attr_smoke[attr_smoke %in% c(4,5,6)] <- 1
-print(length(attr_smoke))
-print(length(data_friends))
-break
+
+
 gfriends <- graph_from_adjacency_matrix(data_friends)
 gfriends.smoke <- attr_smoke
 
@@ -26,7 +25,7 @@ gfriends.smoke <- attr_smoke
 gfriends.indegree <- degree(gfriends, mode = "in")
 plot(gfriends.indegree, gfriends.smoke, main="Scatterplot smoke ~ indegree", 
   	xlab="indegree", ylab="smoke (0/1)", pch=19)
-
+break
 # hasilnya tdk terbukti karena tdk terlihat jelas kecenderungan jumlah teman dgn kebiasaan smoke
 
 # check berdasarkan clustering coefficient or transitivity
