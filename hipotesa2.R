@@ -16,12 +16,14 @@ gfoods.reviewHelpfulness <- attr_reviewHelpfulness
 
 
 gfoods.indegree <- degree(gfoods)
+png(file="D:\\Project\\hipotesis-data-graph/scatterplot_hipotesa2.png",
+width=600, height=350)
 plot(gfoods.indegree, gfoods.reviewHelpfulness, main="Scatterplot helpfulness ~ indegree", 
-  	xlab="indegree", ylab="helpfulness ", pch=19)
-break
+  	xlab="indegree", ylab="helpfulness", pch=19)
+dev.off()
 gfoods.clustcoeff <- transitivity(gfoods, type="local", isolates = "zero")
 plot(gfoods.clustcoeff, gfoods.reviewHelpfulness, main="Scatterplot helpfulness ~ clustcoeff", 
-  	xlab="clustcoeff", ylab="helpfulness ", pch=19)
+  	xlab="clustcoeff", ylab="helpfulness", pch=19)
 
 
 data_cek <- as.data.frame(cbind(gfoods.reviewHelpfulness, gfoods.indegree, gfoods.clustcoeff, attrb[,2]))

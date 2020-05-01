@@ -18,9 +18,11 @@ gfoods.userId <- attr_userId
 
 
 gfoods.indegree <- degree(gfoods)
+png(file="D:\\Project\\hipotesis-data-graph/scatterplot_hipotesa1.png",
+width=600, height=350)
 plot(gfoods.indegree, gfoods.userId, main="Scatterplot reviedByUser ~ indegree", 
   	xlab="indegree", ylab="reviedByUser (0/1)", pch=19)
-
+dev.off()
 gfoods.clustcoeff <- transitivity(gfoods, type="local", isolates = "zero")
 plot(gfoods.clustcoeff, gfoods.userId, main="Scatterplot reviedByUser ~ clustcoeff", 
   	xlab="clustcoeff", ylab="reviedByUser (0/1)", pch=19)
