@@ -31,13 +31,17 @@ V(gpokec)$reviewUserId[V(gpokec)$reviewUserId != 1] <- 2
 colrs <- c("tomato", "gold")
 V(gpokec)$color <- colrs[as.integer(V(gpokec)$reviewUserId)]
 deg <- degree(gpokec, mode="all")
-print(deg)
 V(gpokec)$size <- deg
 V(gpokec)$label <- NA
 
 E(gpokec)$arrow.size <- .2
 E(gpokec)$edge.color <- "gray80"
 l <- layout_with_graphopt(gpokec)
+png(file="D:\\Project\\hipotesis-data-graph/graph_hipotesa1.png",
+width=600, height=350)
+
 plot(gpokec,layout=l)
+
 legend(x=-1.5, y=-1.1, c("Direview","Tidak direview"), pch=21,
        col="#777777", pt.bg=colrs, pt.cex=2, cex=.8, bty="n", ncol=1)
+dev.off()
