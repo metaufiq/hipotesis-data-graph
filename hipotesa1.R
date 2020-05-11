@@ -1,14 +1,17 @@
-#Data berisi 197 siswa --> data relasi, ukuran matriks 199x197
-#cell(i,j) = 1 berarti siswa-i berteman dengan siswa-j
 library(igraph)
 setwd("D:\\Project\\hipotesis-data-graph")
+#hipotesa 1: Apakah makanan yang direview oleh A3UCN2RGY7O6S1 populer ?
 
+#mengambil data relasi
 relation = as.matrix(read.csv("relasi.csv",header=FALSE, sep=",",stringsAsFactors=FALSE))
+
+#jika ada relasi antara index baris dan kolomnya maka nilainya 1, jika tidak maka 1
 relation[grepl("0",relation)] <- 0
 relation[grepl("1",relation)] <- 1
 attrb = as.matrix(read.csv("atribut.csv",header=FALSE, sep=","))
 
 
+#mengambil attribut userId,jika nilainya 1 maka makanan tersebut direview oleh A3UCN2RGY7O6S1,jika tidak maka 0
 attr_userId = attrb[,2]
 attr_userId[grepl("A3UCN2RGY7O6S1",attr_userId)] <- 1
 attr_userId[!attr_userId %in% c(1)] <- 0
@@ -17,11 +20,12 @@ gfoods <- graph_from_adjacency_matrix(relation)
 gfoods.userId <- attr_userId
 
 
-gfoods.indegree <- degree(gfoods)
+gfoods.degree <- degree(gfoods)
 png(file="D:\\Project\\hipotesis-data-graph/scatterplot_hipotesa1.png",
 width=600, height=350)
-plot(gfoods.indegree, gfoods.userId, main="Scatterplot reviedByUser ~ indegree", 
-  	xlab="indegree", ylab="reviedByUser (0/1)", pch=19)
+plot(gfoods.degree, gfoods.userId, main="Scatterplot reviedByUser ~ degree", 
+  	xlab="degree", ylab="reviedByUser (0/1)", pch=19)
+#hasil hipotesa: direview oleh A3UCN2RGY7O6S1 atau tidak,tidak mempengaruhi sebuah makanan populer pada amazon
 
 gfoods.clustcoeff <- transitivity(gfoods, type="local", isolates = "zero")
 plot(gfoods.clustcoeff, gfoods.userId, main="Scatterplot reviedByUser ~ clustcoeff", 

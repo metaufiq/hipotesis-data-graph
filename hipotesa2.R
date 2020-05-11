@@ -1,14 +1,16 @@
-#Data berisi 197 siswa --> data relasi, ukuran matriks 199x197
-#cell(i,j) = 1 berarti siswa-i berteman dengan siswa-j
+#hipotesa 2:Apakah helpfulness yang tinggi menentukan produk populer ?
 library(igraph)
 setwd("D:\\Project\\hipotesis-data-graph")
 
+#mengambil data relasi
 relation = as.matrix(read.csv("relasi.csv",header=FALSE, sep=",",stringsAsFactors=FALSE))
+
+#jika ada relasi antara index baris dan kolomnya maka nilainya 1, jika tidak maka 1
 relation[grepl("0",relation)] <- 0
 relation[grepl("1",relation)] <- 1
 attrb = as.matrix(read.csv("atribut.csv",header=FALSE, sep=","))
 
-
+#mengambil attribut  helpfulness
 attr_reviewHelpfulness = attrb[,3]
 
 gfoods <- graph_from_adjacency_matrix(relation)
@@ -20,6 +22,8 @@ png(file="D:\\Project\\hipotesis-data-graph/scatterplot_hipotesa2.png",
 width=600, height=350)
 plot(gfoods.indegree, gfoods.reviewHelpfulness, main="Scatterplot helpfulness ~ indegree", 
   	xlab="indegree", ylab="helpfulness", pch=19)
+	  
+#hasil hipotesa: tinggi tidaknya rata-rata helpfullness review pada makanan tidak mempengaruhi sebuah makanan populer pada amazon
 dev.off()
 gfoods.clustcoeff <- transitivity(gfoods, type="local", isolates = "zero")
 plot(gfoods.clustcoeff, gfoods.reviewHelpfulness, main="Scatterplot helpfulness ~ clustcoeff", 
